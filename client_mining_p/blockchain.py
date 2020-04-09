@@ -143,15 +143,14 @@ def mine():
     if not all(i in data for i in needed):
         return jsonify({"message": "failure"}), 500
     proof = request.json["proof"]
+    print(request.json)
     block_string = json.dumps(blockchain.last_block, sort_keys=True)    
-    if blockchain.valid_proof(block_string, proof):
-        previous_hash = blockchain.hash(blockchain.last_block)
-        block = blockchain.new_block(proof, previous_hash)
-        response = {
-            "message": "New Block Forged",
-        }
-        return jsonify(response), 200
-    return jsonify({"message": "failure"}), 500
+    previous_hash = blockchain.hash(blockchain.last_block)
+    block = blockchain.new_block(proof, previous_hash)
+    response = {
+        "message": "New Block Forged",
+    }
+    return jsonify(response), 200
         
 
     # response = {
