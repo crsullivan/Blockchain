@@ -10,7 +10,7 @@ export default function Home() {
         .then(res => {
           console.log('resdata', res)
           console.log(id)
-          setCoins(res.data.chain.map(item => item.transactions.filter(item => item.sender === id || item.recipient === id)))
+          setCoins(res.data)
         })
         .catch(err => console.log(err.response))
       }, []);
