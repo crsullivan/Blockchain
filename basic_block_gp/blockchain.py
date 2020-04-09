@@ -16,7 +16,7 @@ class Blockchain(object):
     def new_block(self, proof, previous_hash=None):
         """
         Create a new Block in the Blockchain
-​
+        
         A block should have:
         * Index
         * Timestamp
@@ -51,7 +51,7 @@ class Blockchain(object):
         self.chain.append(block)
         # Return the new block
         return block
-
+        
     def hash(self, block):
         """
         Creates a SHA-256 hash of a Block
@@ -128,18 +128,12 @@ node_identifier = str(uuid4()).replace('-', '')
 # Instantiate the Blockchain
 blockchain = Blockchain()
 
-@app.route('/mine', methods=['POST'])
+@app.route('/mine', methods=['GET'])
 def mine():
-    data = request.get_json()
-    needed = ['proof', 'id']
-    if not all(i in data for i in needed):
-          return jsonify({
-              'message':'failure'
-          }), 400     
     # Run the proof of work algorithm to get the next proof
     proof = blockchain.proof_of_work()
 
-    # # Forge the new Block by adding it to the chain with the proof
+    # Forge the new Block by adding it to the chain with the proof
     previous_hash = blockchain.hash(blockchain.last_block)
     block = blockchain.new_block(proof, previous_hash)
 
@@ -163,4 +157,4 @@ def full_chain():
 
 # Run the program on port 5000
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=1000)
+    app.run(host='0.0.0.0', port=5000)

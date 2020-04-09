@@ -117,7 +117,7 @@ class Blockchain(object):
         """
         guess = f"{block_string}{proof}".encode()
         guess_hash = hashlib.sha256(guess).hexdigest()
-        return guess_hash[:4] == "0000"
+        return guess_hash[:3] == "000"
 
 # Instantiate our Node
 app = Flask(__name__)
@@ -141,12 +141,19 @@ def mine():
     data = request.get_json()
     needed = ['proof', 'id']
     if not all(i in data for i in needed):
-          return jsonify({
-              'message':'failure'
-          }), 400 
-    return jsonify({
-        'message':"New Block Forged"
-    }), 200    
+        return jsonify({"message": "failure"}), 500
+    proof = request.json["proof"]
+    block_string = json.dumps(blockchain.last_block, sort_keys=True)    
+    if blockchain.valid_proof(block_string, proof):
+        previous_hash = blockchain.hash(blockchain.last_block)
+        block = blockchain.new_block(proof, previous_hash)
+        response = {
+            "message": "New Block Forged",
+        }
+        return jsonify(response), 200
+    return jsonify({"message": "failure"}), 500
+        
+
     # response = {
     #     'message': "New Block Forged"
     # }

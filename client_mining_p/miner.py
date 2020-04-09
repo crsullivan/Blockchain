@@ -34,7 +34,7 @@ def valid_proof(block_string, proof):
     guess = f"{block_string}{proof}".encode()
     guess_hash = hashlib.sha256(guess).hexdigest()
     # return True or False
-    return guess_hash[:6] == "000000"
+    return guess_hash[:3] == "000"
 
 
 if __name__ == '__main__':
@@ -62,7 +62,6 @@ if __name__ == '__main__':
             print("Response returned:")
             print(r)
             break
-
         # TODO: Get the block from `data` and use it to look for a new proof
         new_proof = proof_of_work(data["last_block"])
         print(new_proof)
